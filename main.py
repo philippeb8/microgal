@@ -14,10 +14,12 @@ coef = []
 coef.append(signal.butter(4, 0.03, analog=False))
 coef.append(signal.butter(4, 0.03, analog=False))
 
+sig_x = []
 sig_ff = []
 
 for i in [1, 2]:
   array = np.transpose(asarray(Image.open("chart" + str(i) + ".png")))
+  axis = []
   graph = []
 
   x = 2 * len(array) / 40
@@ -39,8 +41,11 @@ for i in [1, 2]:
     else:
       graph.append(0)
       
+    axis.append(x / len(array) * 40)
+      
     x += 3 / 32 * len(array) / 40
   
+  sig_x.append(np.array(axis))
   sig_ff.append(signal.filtfilt(coef[i - 1][0], coef[i - 1][1], np.array(graph)))
 
 sig_diff = sig_ff[0] - sig_ff[1]
@@ -48,18 +53,20 @@ sig_grad = np.gradient(sig_ff[1])
 sig_grad2 = np.gradient(sig_grad)
 
 plt.subplot(2, 1, 1)
-plt.title("Micro-Gal level gravity measurements with cold atom interferometry")
+plt.title("Gravitational Acceleration (µGal) vs Time (h)")
 plt.grid(True, which='both')
-plt.plot(sig_ff[0], label='Experimental Data')
-plt.plot(sig_ff[1], label='Tide Model')
+plt.plot(sig_x[0], sig_ff[0], label='Experimental Data')
+plt.plot(sig_x[1], sig_ff[1], label='Tide Model')
 plt.legend(loc="upper center")
+#plt.savefig('microgal1.svg', format='svg', dpi=1200)
 
 plt.subplot(2, 1, 2)
-plt.title("Residual of Micro-Gal level gravity measurements with cold atom interferometry")
+plt.title("Residual of Gravitational Acceleration (µGal) vs Time (h)")
 plt.grid(True, which='both')
-plt.plot(sig_diff / np.amax(sig_diff), label='Normalized Residual')
-plt.plot(sig_grad / np.amax(sig_grad), label='Normalized Derivative')
+plt.plot(sig_x[0], sig_diff / np.amax(sig_diff), label='Normalized Residual')
+plt.plot(sig_x[1], sig_grad / np.amax(sig_grad), label='Normalized Derivative')
 plt.legend(loc="upper center")
+#plt.savefig('microgal2.svg', format='svg', dpi=1200)
 
 mng = plt.get_current_fig_manager()
 mng.resize(1024, 768)
