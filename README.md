@@ -6,5 +6,7 @@ Residual of the Earth's tides is showing consistent "aether wind" (when the grav
 The data was extracted from here:
 http://cpb.iphy.ac.cn/article/2015/cpb_24_5_050401/cpb150398f8_hr.png
 
+[![DOI](https://zenodo.org/badge/457051265.svg)](https://zenodo.org/badge/latestdoi/457051265)
+
 Regards,
 Fornux Inc.
